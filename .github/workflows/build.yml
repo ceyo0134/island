@@ -1,0 +1,37 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      # settings.gradle expects the "deagle" library as a sibling directory (../deagle/library)
+      - name: Clone deagle next to the project
+        run: git clone --depth 1 https://github.com/oasisfeng/deagle.git "$GITHUB_WORKSPACE/../deagle"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
+
+      - name: Install Android SDK platform 30
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-30" "build-tools;30.0.3" >/dev/null || true
+
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: 6.5
+
+      - name: Build debug APK
+        run: ./gradlew assembleCompleteDebug --stacktrace
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: island-debug-apk
+          path: assembly/build/outputs/apk/**/*.apk
