@@ -27,6 +27,21 @@ jobs:
           # deagle compiles against these, so they cannot be runtimeOnly
           sed -i 's/runtimeOnly /implementation /' "$GITHUB_WORKSPACE/../deagle/library/build.gradle"
 
+      # Condom ships hidden-API stub classes that must not leak to dependents: strip them before the exported jars are bundled
+      - name: Strip Condom stub classes from exported jars
+        run: |
+          cat >> "$GITHUB_WORKSPACE/../condom/library/build.gradle" <<'GRADLE'
+
+          afterEvaluate {
+              android.libraryVariants.all { variant ->
+                  def V = variant.name.capitalize()
+                  def rm = tasks.findByName("remove${V}StubClasses")
+                  rm.dependsOn "compile${V}JavaWithJavac"
+                  tasks.matching { it.name == "bundleLibCompileToJar${V}" || it.name == "bundleLibRuntimeToJar${V}" }.all { it.dependsOn rm }
+              }
+          }
+          GRADLE
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
