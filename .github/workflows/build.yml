@@ -15,6 +15,16 @@ jobs:
       - name: Clone deagle next to the project
         run: git clone --depth 1 https://github.com/oasisfeng/deagle.git "$GITHUB_WORKSPACE/../deagle"
 
+      # JCenter is gone: build Condom (com.oasisfeng.condom:library) from source as well
+      - name: Clone condom next to the project
+        run: git clone --depth 1 --branch v2.5.0 https://github.com/oasisfeng/condom.git "$GITHUB_WORKSPACE/../condom"
+
+      - name: Modernise old sibling modules
+        run: |
+          for f in "$GITHUB_WORKSPACE/../condom/library/build.gradle" "$GITHUB_WORKSPACE/../deagle/library/build.gradle"; do
+            sed -i -E 's/compileSdkVersion [0-9]+/compileSdkVersion 30/; /buildToolsVersion/d' "$f"
+          done
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
