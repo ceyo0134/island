@@ -23,7 +23,16 @@ if (file('local.gradle').exists()) apply from: 'local.gradle'
 allprojects {
     repositories {
         google()
+        mavenCentral()
         jcenter()
+        maven { url 'https://jitpack.io' }
+    }
+
+    // JCenter is gone: fetch Condom (originally com.oasisfeng.condom:library) from JitPack instead.
+    configurations.all {
+        resolutionStrategy.dependencySubstitution {
+            substitute module('com.oasisfeng.condom:library') with module('com.github.oasisfeng.condom:library:v2.5.0')
+        }
     }
 
     ext.compileSdkVersion = 30
