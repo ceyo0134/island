@@ -24,6 +24,8 @@ jobs:
           for f in "$GITHUB_WORKSPACE/../condom/library/build.gradle" "$GITHUB_WORKSPACE/../deagle/library/build.gradle"; do
             sed -i -E 's/compileSdkVersion [0-9]+/compileSdkVersion 30/; /buildToolsVersion/d' "$f"
           done
+          # deagle compiles against these, so they cannot be runtimeOnly
+          sed -i 's/runtimeOnly /implementation /' "$GITHUB_WORKSPACE/../deagle/library/build.gradle"
 
       - uses: actions/setup-java@v4
         with:
