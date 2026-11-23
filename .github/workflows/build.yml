@@ -28,7 +28,14 @@ jobs:
           gradle-version: 6.5
 
       - name: Build debug APK
-        run: ./gradlew assembleCompleteDebug --stacktrace
+        run: |
+          set +e
+          ./gradlew assembleCompleteDebug --stacktrace > build.log 2>&1
+          code=$?
+          if [ $code -ne 0 ]; then
+            grep -nE "wrong|error:|Error|FAILED|Could not|not found|Caused by" build.log | head -15 | while IFS= read -r l; do echo "::error::${l:0:400}"; done
+          fi
+          exit $code
 
       - uses: actions/upload-artifact@v4
         if: always()
