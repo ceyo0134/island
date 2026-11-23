@@ -30,6 +30,7 @@ jobs:
       - name: Build debug APK
         run: |
           set +e
+          chmod +x gradlew
           ./gradlew assembleCompleteDebug --stacktrace > build.log 2>&1
           code=$?
           if [ $code -ne 0 ]; then
