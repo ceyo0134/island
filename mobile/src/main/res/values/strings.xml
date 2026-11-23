@@ -221,4 +221,13 @@ the sandbox environment. Island never collect data related to your privacy, plea
     <string name="tip_critical_package_required">Critical app (or component) required</string>
     <string name="tip_critical_package_message">\"%1$s\" is a critical system component required inside Island for Android system to work properly.\n\nTake action now to avoid unexpected app or system malfunction.</string>
 
+
+    <!-- Google Sign-In -->
+    <string name="google_sign_in_title">Google Sign-In</string>
+    <string name="google_sign_in_button">Google ile Giriş Yap</string>
+    <string name="google_sign_out_button">Çıkış Yap</string>
+    <string name="google_sign_in_signed_out">Giriş yapılmadı</string>
+    <string name="google_sign_in_signed_in_as">Giriş yapıldı:\n%1$s\n%2$s</string>
+    <string name="google_sign_in_failed">Giriş başarısız (kod: %1$d)</string>
+    <string name="google_sign_in_config_error">Yapılandırma hatası: google-services.json ve SHA-1 ayarlarını kontrol edin.</string>
 </resources>
